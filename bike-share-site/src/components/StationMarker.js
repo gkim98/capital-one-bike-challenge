@@ -1,11 +1,15 @@
+/*
+    StationMarker.js
+
+    Station marker that signifies a bike station on the map
+*/
+
 import React from 'react';
 import { Marker } from 'react-google-maps';
 
 import stationImg from '../assets/stationImg.png'
 
 const StationMarker = (props) => {
-    console.log(stationImg)
-
     return (
         <Marker
             position={props.position}

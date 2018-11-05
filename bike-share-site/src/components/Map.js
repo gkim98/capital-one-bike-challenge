@@ -1,4 +1,11 @@
+/*
+    Map.js
+
+    Map that holds the agent-based simulation
+*/
+
 import React from 'react';
+import {connect} from 'react-redux';
 import {
     withGoogleMap,
     GoogleMap,
@@ -15,12 +22,6 @@ const defaultMapOptions = {
     mapTypeControl: false
 };
 
-let dummy = [
-    {
-        position: {lat: 39.951544406619306, lng: -75.19083540348124}
-    }
-];
-
 const mapEnvironment = compose(
     withProps({
         containerElement: <div style={{height: `500px`, width: `100%`}}/>,
@@ -30,19 +31,23 @@ const mapEnvironment = compose(
 );
 
 const MapLayout = (props) => {
-    let bikeMarkers = dummy.map((bike, i) => (
-        <BikeMarker 
-            key={i}
-            position={bike.position}
-        />
-    ));
-
+    // creates the station markers to display on map
     let stationMarkers = stations.map((station, i) => (
         <StationMarker 
             key={station.id}
             position={station.position}
         />
     ));
+
+    // creates bike markers to display on map
+    let bikeMarkers = props.bikes.map((bike, i) => (
+        <BikeMarker 
+            key={i}
+            position={bike.position}
+        />
+    ));
+
+    console.log(bikeMarkers)
 
     return (
         <div>
@@ -60,4 +65,10 @@ const MapLayout = (props) => {
 
 const Map = mapEnvironment(MapLayout);
 
-export default Map;
+const mapStateToProps = (state) => {
+    return {
+        bikes: state.bikes
+    }
+};
+
+export default connect(mapStateToProps, undefined)(Map);

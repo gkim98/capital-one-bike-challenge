@@ -1,3 +1,9 @@
+/*
+    MapContainer.js
+
+    Holds the map and other simulation components, such as the options pane
+*/
+
 import React, { Component } from 'react';
 
 import './MapContainer.scss'
@@ -9,7 +15,6 @@ class MapContainer extends Component {
     render() {
         return (
             <div className='map-container'>
-
                 <Options />
                 <Map />
             </div>
