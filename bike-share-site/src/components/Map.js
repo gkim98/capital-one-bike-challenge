@@ -8,13 +8,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {
     withGoogleMap,
-    GoogleMap,
+    GoogleMap
 } from 'react-google-maps';
 import {compose, withProps} from 'recompose';
 
 import stations from '../assets/stations';
 import mapStyles from '../assets/mapStyles.json';
-import BikeMarker from './BikeMarker';
 import StationMarker from './StationMarker';
 
 const defaultMapOptions = {
@@ -36,18 +35,9 @@ const MapLayout = (props) => {
         <StationMarker 
             key={station.id}
             position={station.position}
+            count={props.counts[station.id]}
         />
     ));
-
-    // creates bike markers to display on map
-    let bikeMarkers = props.bikes.map((bike, i) => (
-        <BikeMarker 
-            key={i}
-            position={bike.position}
-        />
-    ));
-
-    console.log(bikeMarkers)
 
     return (
         <div>
@@ -57,7 +47,6 @@ const MapLayout = (props) => {
                 defaultOptions={defaultMapOptions}
             >
                 {stationMarkers}
-                {bikeMarkers}
             </GoogleMap>
         </div>
     )

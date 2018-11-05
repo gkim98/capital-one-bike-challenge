@@ -259,10 +259,6 @@ const stations = [
 		id: 3082,
 		position: {lat: 34.04652004094437, lng: -118.23741079529809}
 	},
-	{
-		id: 4108,
-		position: {lat: 23.94414481481477, lng: -83.2046895185184}
-	},
 ]
 
 export default stations;

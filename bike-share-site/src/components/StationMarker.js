@@ -5,23 +5,26 @@
 */
 
 import React from 'react';
-import { Marker } from 'react-google-maps';
+import { OverlayView } from 'react-google-maps';
 
 import stationImg from '../assets/stationImg.png'
 
 const StationMarker = (props) => {
     return (
-        <Marker
+        <OverlayView
             position={props.position}
-            icon={{
-                url: stationImg,
-                size: {width:340, height:300},
-                anchor: {x:8.5, y:15},
-                scaledSize: {width:17, height:15}
-            }}
-            zIndex={-1}
+            mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
         >
-        </Marker>
+            <div style={{
+                'backgroundColor':'#3f72af',
+                'color': '#f9f7f7',
+                'padding': '3px',
+                'borderRadius': '3px',
+                'font-size': '12px'
+            }}>
+                {props.count}
+            </div>
+        </OverlayView>
     )
 }
 
