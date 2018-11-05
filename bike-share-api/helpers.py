@@ -38,7 +38,7 @@ def create_df():
     so follow same steps for consistent input to model
 '''
 
-def prep_df(data):
+def prep_df(data, monthSim):
     # removes chance of mutating original df
     df = data.copy()
     
@@ -52,7 +52,7 @@ def prep_df(data):
     # appends the one-hot for the month variable
     entries = len(df.index)
     for month in months:
-        if month == 'Month_' + month:
+        if monthSim == 'Month_' + month:
             # concats Series of ones if corresponding month
             month_encoding =  np.ones((entries, 1))
         else:
@@ -60,3 +60,28 @@ def prep_df(data):
         df[month] = month_encoding
 
     return df
+
+def groupby_to_dict(grouped):
+    levels = len(grouped.index.levels)
+    dicts = [{} for i in range(levels)]
+    last_index = None
+
+    for index,value in grouped.itertuples():
+
+        if not last_index:
+            last_index = index
+
+        for (ii,(i,j)) in enumerate(zip(index, last_index)):
+            if not i == j:
+                ii = levels - ii -1
+                dicts[:ii] =  [{} for _ in dicts[:ii]]
+                break
+
+        for i, key in enumerate(reversed(index)):
+            dicts[i][key] = value
+            value = dicts[i]
+
+        last_index = index
+
+    result = dicts[-1]
+    return result

@@ -6,6 +6,7 @@ import sys
 
 from helpers import create_df
 from helpers import prep_df
+from helpers import groupby_to_dict
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import LinearRegression
 
@@ -19,26 +20,36 @@ def welcome_page():
 
 @app.route('/simulation', methods=['POST'])
 def create_simulation():
-    json_ = request.json
-    print(json_, file=sys.stderr)
-    print(json_)
+    req = request.get_json()
+    print(req, file=sys.stderr)
 
     # creates a df of variables based on given month
     init_df = create_df()
-    model_df = prep_df(init_df)
+    model_df = prep_df(init_df, req['month'])
 
     # run location model to find destination probabilities
     location_probs = location_model.predict_proba(model_df)
-    print(location_probs[1:2], file=sys.stderr)
 
     # run frequency model to find how many bikes are rented in an hour
     frequency_probs = frequency_model.predict(model_df)
-    print(frequency_probs[1:2], file=sys.stderr)
 
     return_locations = location_probs.tolist()
     return_frequencies = frequency_probs.tolist()
 
-    return jsonify({'location_probs': return_locations, 'freq_probs': return_frequencies})
+    # construct one df with vars and predictions
+    combined_df = init_df.copy()
+    combined_df['count'] = frequency_probs
+    for i, station in enumerate(init_df['Starting Station ID'].unique()):
+        combined_df[station] = location_probs[:, i]
+
+    print(combined_df.columns, file=sys.stderr)
+    # groupby to get path to predictions from the given variables
+    grouped = combined_df.groupby(['Time_of_Day', 'Starting Station ID']).count()
+
+    # convert to json, which is easier understood by client
+    result = groupby_to_dict(grouped)
+
+    return jsonify({'predictions': result})
 
 if __name__ == '__main__':
     # loads pickled models

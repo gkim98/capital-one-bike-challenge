@@ -21,12 +21,17 @@ class Options extends Component {
         buttonMessage: 'Run Simulation'
     }
 
+    // runs simulation based on specific rules
+    runSimulation = () => {
+
+    }
+
     // sends call to API for simulation build based on inputted values
     callSimulation = (e) => {
         e.preventDefault();
 
         Object.keys(stationsObject).forEach((station) => {
-            this.props.addBikes(station, parseInt(this.state.numBikes))
+            this.props.changeCount(station, parseInt(this.state.numBikes))
         })
 
         this.setState({
@@ -35,7 +40,7 @@ class Options extends Component {
         });
 
         axios.post('http://localhost:4000/simulation', {
-            test: 'testvalue'
+            month: this.state.month
         }).then((response) => {
             this.setState({
                 buttonMessage: 'Playing'

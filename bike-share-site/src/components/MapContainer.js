@@ -80,10 +80,17 @@ class MapContainer extends Component {
         '4108': 0 
     }
 
+    changeCount = (location, newCount) => {
+        let newState = {}
+        newState[location] = newCount
+
+        this.setState(newState)
+    }
+
     render() {
         return (
             <div className='map-container'>
-                <Options />
+                <Options changeCount={this.changeCount}/>
                 <Map counts={this.state}/>
             </div>
         )

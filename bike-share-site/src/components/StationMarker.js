@@ -20,7 +20,7 @@ const StationMarker = (props) => {
                 'color': '#f9f7f7',
                 'padding': '3px',
                 'borderRadius': '3px',
-                'font-size': '12px'
+                'fontSize': '12px'
             }}>
                 {props.count}
             </div>
